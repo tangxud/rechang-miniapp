@@ -1,9 +1,4 @@
-// #ifdef H5
-const BASE_URL = ''  // H5: requests go through Vite proxy
-// #endif
-// #ifndef H5
-const BASE_URL = 'http://localhost:8080'  // MP: direct request
-// #endif
+import { BASE_URL } from '../config/env'
 
 interface ApiResult<T = any> {
   code: number
@@ -49,5 +44,3 @@ export function request<T = any>(options: UniApp.RequestOptions): Promise<T> {
     })
   })
 }
-
-export { BASE_URL }

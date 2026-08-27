@@ -1,9 +1,4 @@
-// #ifdef H5
-const WS_BASE = `ws://${window.location.host}`
-// #endif
-// #ifndef H5
-const WS_BASE = 'ws://localhost:8080'
-// #endif
+import { WS_BASE } from '../config/env'
 
 export class CountdownWS {
   private socket: UniApp.SocketTask | null = null

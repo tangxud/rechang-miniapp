@@ -232,7 +232,7 @@ async function onSubmit() {
   if (submitting.value) return
   submitting.value = true
   try {
-    const seatIds = seatList.value.map(s => s.seatId).filter(Boolean)
+    const seatIds = seatList.value.map(s => s.seatId).filter((id): id is number => id != null)
     const order: any = await createOrder({
       performanceId: perfId.value,
       seatIds: isStanding.value ? [] : seatIds,

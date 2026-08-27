@@ -40,7 +40,7 @@
       <view class="card">
         <view class="anon-row">
           <text class="anon-label">匿名评价</text>
-          <switch :checked="isAnonymous" @change="isAnonymous = $event.detail.value" color="#FF6B35" />
+          <switch :checked="isAnonymous" @change="(e: any) => (isAnonymous = e.detail.value)" color="#FF6B35" />
         </view>
       </view>
       <view class="bottom-placeholder"></view>

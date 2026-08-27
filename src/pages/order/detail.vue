@@ -150,11 +150,10 @@ async function onTransfer(t: any) {
 }
 
 function showTransferModal(t: any, token: string) {
+  // 小程序端直接传 token；H5 端拼完整跳转链接（条件编译，vue-tsc 只认 let 单声明写法）
+  let shareUrl = token
   // #ifdef H5
-  const shareUrl = `${window.location.origin}/#/pages/review/transfer-claim?token=${token}`
-  // #endif
-  // #ifndef H5
-  const shareUrl = token
+  shareUrl = `${window.location.origin}/#/pages/review/transfer-claim?token=${token}`
   // #endif
   uni.showModal({
     title: '转赠成功',
