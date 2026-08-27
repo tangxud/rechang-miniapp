@@ -1,0 +1,152 @@
+{
+  "pages": [
+    {
+      "path": "pages/home/index",
+      "style": { "navigationBarTitleText": "热场", "navigationStyle": "custom" }
+    },
+    {
+      "path": "pages/discover/index",
+      "style": { "navigationBarTitleText": "发现", "enablePullDownRefresh": true }
+    },
+    {
+      "path": "pages/tickets/index",
+      "style": { "navigationBarTitleText": "票夹" }
+    },
+    {
+      "path": "pages/message/index",
+      "style": { "navigationBarTitleText": "消息" }
+    },
+    {
+      "path": "pages/profile/index",
+      "style": { "navigationBarTitleText": "我的" }
+    },
+    {
+      "path": "pages/home/search",
+      "style": { "navigationBarTitleText": "搜索" }
+    },
+    {
+      "path": "pages/home/search-result",
+      "style": { "navigationBarTitleText": "搜索结果" }
+    },
+    {
+      "path": "pages/detail/index",
+      "style": { "navigationBarTitleText": "演出详情" }
+    },
+    {
+      "path": "pages/profile/login",
+      "style": { "navigationBarTitleText": "登录" }
+    },
+    {
+      "path": "pages/profile/phone-bind",
+      "style": { "navigationBarTitleText": "绑定手机号" }
+    },
+    {
+      "path": "pages/profile/realname",
+      "style": { "navigationBarTitleText": "实名认证" }
+    },
+    {
+      "path": "pages/profile/attendees",
+      "style": { "navigationBarTitleText": "常用观演人" }
+    },
+    {
+      "path": "pages/profile/attendee-edit",
+      "style": { "navigationBarTitleText": "编辑观演人" }
+    },
+    {
+      "path": "pages/profile/invoice",
+      "style": { "navigationBarTitleText": "发票管理" }
+    },
+    {
+      "path": "pages/tickets/qrcode",
+      "style": { "navigationBarTitleText": "入场二维码" }
+    },
+    {
+      "path": "pages/seat/index",
+      "style": { "navigationBarTitleText": "选座" }
+    },
+    {
+      "path": "pages/order/confirm",
+      "style": { "navigationBarTitleText": "确认订单" }
+    },
+    {
+      "path": "pages/order/pay",
+      "style": { "navigationBarTitleText": "收银台" }
+    },
+    {
+      "path": "pages/order/result",
+      "style": { "navigationBarTitleText": "支付结果" }
+    },
+    {
+      "path": "pages/order/list",
+      "style": { "navigationBarTitleText": "我的订单" }
+    },
+    {
+      "path": "pages/order/detail",
+      "style": { "navigationBarTitleText": "订单详情" }
+    },
+    {
+      "path": "pages/order/refund",
+      "style": { "navigationBarTitleText": "申请退票" }
+    },
+    {
+      "path": "pages/review/list",
+      "style": { "navigationBarTitleText": "观众口碑" }
+    },
+    {
+      "path": "pages/review/post",
+      "style": { "navigationBarTitleText": "写评价" }
+    },
+    {
+      "path": "pages/review/detail",
+      "style": { "navigationBarTitleText": "评价详情" }
+    },
+    {
+      "path": "pages/tickets/transfer-claim",
+      "style": { "navigationBarTitleText": "领取转赠票" }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "热场",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#F5F5F5"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#FF6B35",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "static/tab/home.png",
+        "selectedIconPath": "static/tab/home-active.png"
+      },
+      {
+        "pagePath": "pages/discover/index",
+        "text": "发现",
+        "iconPath": "static/tab/discover.png",
+        "selectedIconPath": "static/tab/discover-active.png"
+      },
+      {
+        "pagePath": "pages/tickets/index",
+        "text": "票夹",
+        "iconPath": "static/tab/ticket.png",
+        "selectedIconPath": "static/tab/ticket-active.png"
+      },
+      {
+        "pagePath": "pages/message/index",
+        "text": "消息",
+        "iconPath": "static/tab/message.png",
+        "selectedIconPath": "static/tab/message-active.png"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的",
+        "iconPath": "static/tab/profile.png",
+        "selectedIconPath": "static/tab/profile-active.png"
+      }
+    ]
+  }
+}
