@@ -24,15 +24,15 @@
         </view>
 
         <!-- 站票模式 -->
-        <view v-if="seatMap.is_standing" class="standing-section">
+        <view v-if="seatMap.isStanding" class="standing-section">
           <text class="standing-title">通票（无需选座）</text>
           <view class="zone-cards">
             <view
-              v-for="zone in seatMap.price_zones" :key="zone.region"
+              v-for="zone in seatMap.priceZones" :key="zone.region"
               class="zone-card" :class="{ active: selectedZone === zone.region }"
               @tap="selectStandingZone(zone)"
             >
-              <text class="zone-name">{{ zone.zone_name }}</text>
+              <text class="zone-name">{{ zone.zoneName }}</text>
               <text class="zone-price">¥{{ formatPrice(zone.price) }}</text>
             </view>
           </view>
@@ -57,17 +57,17 @@
               <text class="region-price">¥{{ formatPrice(region.price) }}</text>
             </view>
             <view
-              v-for="row in region.rows" :key="row.row_label"
+              v-for="row in region.rows" :key="row.rowLabel"
               class="seat-row"
             >
-              <text class="row-label">{{ row.row_label }}排</text>
+              <text class="row-label">{{ row.rowLabel }}排</text>
               <view class="seats">
                 <view
-                  v-for="seat in row.seats" :key="seat.seat_id"
+                  v-for="seat in row.seats" :key="seat.seatId"
                   class="seat" :class="seatClass(seat)"
                   @tap="toggleSeat(seat)"
                 >
-                  <text class="seat-col">{{ seat.col_label }}</text>
+                  <text class="seat-col">{{ seat.colLabel }}</text>
                 </view>
               </view>
             </view>
@@ -81,9 +81,9 @@
       <view class="action-info">
         <text class="info-count">已选 {{ selectedSeats.length || standingCount }} 张</text>
         <text v-if="selectedSeats.length > 0" class="info-detail">
-          {{ selectedSeats.map(s => s.seat_label).join(' / ') }} · ¥{{ formatPrice(totalAmount) }}
+          {{ selectedSeats.map(s => s.seatLabel).join(' / ') }} · ¥{{ formatPrice(totalAmount) }}
         </text>
-        <text v-else-if="seatMap.is_standing" class="info-detail">
+        <text v-else-if="seatMap.isStanding" class="info-detail">
           {{ standingCount }}张 × ¥{{ formatPrice(standingPrice) }}
         </text>
       </view>
@@ -108,8 +108,8 @@ const selectedZone = ref('')
 const standingCount = ref(1)
 
 const standingPrice = computed(() => {
-  if (!seatMap.value?.is_standing || !selectedZone.value) return 0
-  const zone = seatMap.value.price_zones.find((z: any) => z.region === selectedZone.value)
+  if (!seatMap.value?.isStanding || !selectedZone.value) return 0
+  const zone = seatMap.value.priceZones.find((z: any) => z.region === selectedZone.value)
   return zone?.price || 0
 })
 
@@ -136,7 +136,7 @@ async function loadSeatMap() {
 
 function toggleSeat(seat: any) {
   if (seat.status !== 'AVAILABLE') return
-  const idx = selectedSeats.value.findIndex(s => s.seat_id === seat.seat_id)
+  const idx = selectedSeats.value.findIndex(s => s.seatId === seat.seatId)
   if (idx >= 0) {
     selectedSeats.value.splice(idx, 1)
   } else {
@@ -145,7 +145,7 @@ function toggleSeat(seat: any) {
       return
     }
     const region = seatMap.value.regions.find((r: any) =>
-      r.rows.some((row: any) => row.seats.some((s: any) => s.seat_id === seat.seat_id)))
+      r.rows.some((row: any) => row.seats.some((s: any) => s.seatId === seat.seatId)))
     selectedSeats.value.push({ ...seat, _price: region?.price || 0 })
   }
 }
@@ -155,7 +155,7 @@ function selectStandingZone(zone: any) {
 }
 
 function seatClass(seat: any) {
-  const isSelected = selectedSeats.value.some(s => s.seat_id === seat.seat_id)
+  const isSelected = selectedSeats.value.some(s => s.seatId === seat.seatId)
   if (isSelected) return 'seat-selected'
   if (seat.status === 'SOLD') return 'seat-sold'
   if (seat.status === 'LOCKED') return 'seat-locked'
@@ -169,17 +169,17 @@ function goConfirm() {
     uni.showToast({ title: '请选择座位', icon: 'none' })
     return
   }
-  if (seatMap.value.is_standing && !selectedZone.value) {
+  if (seatMap.value.isStanding && !selectedZone.value) {
     uni.showToast({ title: '请选择票价区域', icon: 'none' })
     return
   }
-  const seatIds = selectedSeats.value.map(s => s.seat_id)
+  const seatIds = selectedSeats.value.map(s => s.seatId)
   const params = new URLSearchParams()
   params.set('pid', String(perfId.value))
   params.set('count', String(count))
   if (seatIds.length > 0) {
-    params.set('seat_ids', seatIds.join(','))
-    params.set('seat_labels', selectedSeats.value.map(s => s.seat_label).join(','))
+    params.set('seatIds', seatIds.join(','))
+    params.set('seatLabels', selectedSeats.value.map(s => s.seatLabel).join(','))
     params.set('amount', String(totalAmount.value))
   } else {
     params.set('standing', '1')

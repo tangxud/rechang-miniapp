@@ -10,11 +10,11 @@
       <scroll-view scroll-y class="content">
         <view class="card">
           <view class="perf-row">
-            <image class="poster" :src="order.poster_url || placeholder" mode="aspectFill" />
+            <image class="poster" :src="order.posterUrl || placeholder" mode="aspectFill" />
             <view class="perf-info">
-              <text class="perf-name">{{ order.performance_name }}</text>
-              <text class="perf-date">{{ formatDateTime(order.start_at) }}</text>
-              <text class="perf-venue">{{ order.venue_name }}</text>
+              <text class="perf-name">{{ order.performanceName }}</text>
+              <text class="perf-date">{{ formatDateTime(order.startAt) }}</text>
+              <text class="perf-venue">{{ order.venueName }}</text>
             </view>
           </view>
         </view>
@@ -22,10 +22,10 @@
           <text class="card-title">票信息</text>
         <view v-for="t in order.tickets" :key="t.id" class="ticket-row">
           <view class="ticket-left">
-            <text class="ticket-seat">{{ t.seat_label }}</text>
-            <text class="ticket-attendee">{{ t.attendee_name }}</text>
+            <text class="ticket-seat">{{ t.seatLabel }}</text>
+            <text class="ticket-attendee">{{ t.attendeeName }}</text>
           </view>
-          <text class="ticket-price">¥{{ formatPrice(t.face_amount) }}</text>
+          <text class="ticket-price">¥{{ formatPrice(t.faceAmount) }}</text>
           <text class="ticket-status" :class="statusColorClass(t.status)">{{ ticketStatusLabel(t.status) }}</text>
           <view v-if="t.status === 'USABLE'" class="ticket-qrcode" @tap.stop="goTicketQrcode(t)"><text>电子票</text></view>
           <view v-if="t.status === 'USABLE'" class="ticket-transfer" @tap.stop="onTransfer(t)"><text>转赠</text></view>
@@ -33,10 +33,10 @@
         </view>
         <view class="card">
           <text class="card-title">订单信息</text>
-          <view class="info-row"><text class="info-label">订单号</text><text class="info-value">{{ order.order_no }}</text></view>
-          <view class="info-row"><text class="info-label">下单时间</text><text class="info-value">{{ formatDateTime(order.create_time) }}</text></view>
+          <view class="info-row"><text class="info-label">订单号</text><text class="info-value">{{ order.orderNo }}</text></view>
+          <view class="info-row"><text class="info-label">下单时间</text><text class="info-value">{{ formatDateTime(order.createTime) }}</text></view>
           <view class="info-row"><text class="info-label">支付方式</text><text class="info-value">{{ payChannelText }}</text></view>
-          <view class="info-row"><text class="info-label">订单金额</text><text class="info-value price">¥{{ formatPrice(order.total_amount) }}</text></view>
+          <view class="info-row"><text class="info-label">订单金额</text><text class="info-value price">¥{{ formatPrice(order.totalAmount) }}</text></view>
         </view>
         <view v-if="order.timeline && order.timeline.length" class="card">
           <text class="card-title">状态时间线</text>
@@ -72,7 +72,7 @@ const order = ref<any>(null)
 const loading = ref(false)
 
 const payChannelText = computed(() => {
-  const ch = order.value?.pay_channel
+  const ch = order.value?.payChannel
   if (ch === 'WECHAT') return '微信支付'
   if (ch === 'ALIPAY') return '支付宝'
   return ch || '—'
@@ -121,19 +121,19 @@ function goTickets() { uni.switchTab({ url: '/pages/tickets/index' }) }
 function goRefund() { uni.navigateTo({ url: `/pages/order/refund?orderId=${orderId.value}` }) }
 function goReview() {
   if (!order.value) return
-  uni.navigateTo({ url: `/pages/review/post?perfId=${order.value.performance_id}&orderId=${orderId.value}` })
+  uni.navigateTo({ url: `/pages/review/post?perfId=${order.value.performanceId}&orderId=${orderId.value}` })
 }
 function goMyReview() {
   if (!order.value) return
-  if (order.value.review_id) {
-    uni.navigateTo({ url: `/pages/review/detail?id=${order.value.review_id}&perfId=${order.value.performance_id}` })
+  if (order.value.reviewId) {
+    uni.navigateTo({ url: `/pages/review/detail?id=${order.value.reviewId}&perfId=${order.value.performanceId}` })
   } else {
-    uni.navigateTo({ url: `/pages/review/list?id=${order.value.performance_id}` })
+    uni.navigateTo({ url: `/pages/review/list?id=${order.value.performanceId}` })
   }
 }
-function goTicketQrcode(t: any) { uni.navigateTo({ url: `/pages/tickets/qrcode?id=${t.id}&name=${encodeURIComponent(order.value?.performance_name || '')}` }) }
+function goTicketQrcode(t: any) { uni.navigateTo({ url: `/pages/tickets/qrcode?id=${t.id}&name=${encodeURIComponent(order.value?.performanceName || '')}` }) }
 function goQrcode() { goTicketQrcode(usableTickets.value[0]) }
-function goPay(order: any) { uni.navigateTo({ url: `/pages/order/pay?id=${order.id}&amount=${order.total_amount}` }) }
+function goPay(order: any) { uni.navigateTo({ url: `/pages/order/pay?id=${order.id}&amount=${order.totalAmount}` }) }
 function toastDev(msg: string) { uni.showToast({ title: msg, icon: 'none' }) }
 
 async function onTransfer(t: any) {
@@ -141,7 +141,7 @@ async function onTransfer(t: any) {
   try {
     const res: any = await startTransfer(t.id)
     uni.hideLoading()
-    const token = res?.transfer_token || res?.transferToken || ''
+    const token = res?.transferToken || ''
     if (!token) { uni.showToast({ title: '生成失败', icon: 'none' }); return }
     showTransferModal(t, token)
   } catch (e) {

@@ -7,11 +7,11 @@
       <template v-if="!loading">
         <!-- 演出信息 -->
         <view class="card perf-card">
-          <image class="poster" :src="detail.poster_url || placeholder" mode="aspectFill" />
+          <image class="poster" :src="detail.posterUrl || placeholder" mode="aspectFill" />
           <view class="perf-info">
             <text class="perf-name">{{ detail.name }}</text>
-            <text class="perf-date">{{ formatDateTime(detail.start_at) }}</text>
-            <text class="perf-venue">{{ detail.venue?.venue_name }}</text>
+            <text class="perf-date">{{ formatDateTime(detail.startAt) }}</text>
+            <text class="perf-venue">{{ detail.venue?.venueName }}</text>
           </view>
         </view>
 
@@ -55,7 +55,7 @@
           <view class="cost-row"><text>票款（{{ seatList.length }}张）</text><text>¥{{ formatPrice(totalAmount) }}</text></view>
           <view class="cost-row"><text>服务费</text><text>¥0</text></view>
           <view class="cost-row total"><text>合计</text><text class="total-price">¥{{ formatPrice(totalAmount) }}</text></view>
-          <view v-if="detail.is_strong_real_name" class="realname-tip">⚠ 强实名演出：入场需人脸核验，票面身份=入场人身份</view>
+          <view v-if="detail.isStrongRealName" class="realname-tip">⚠ 强实名演出：入场需人脸核验，票面身份=入场人身份</view>
         </view>
       </template>
     </scroll-view>
@@ -86,7 +86,7 @@
           >
             <view class="picker-item-info">
               <text class="picker-item-name">{{ a.name }}</text>
-              <text class="picker-item-id">{{ a.id_card_masked || '未录入身份证' }}</text>
+              <text class="picker-item-id">{{ a.idCardMasked || '未录入身份证' }}</text>
             </view>
             <text v-if="isAttendeeUsed(a.id) && a.id !== currentPickerAttendeeId" class="picker-item-tag">已选</text>
             <text v-else-if="a.id === currentPickerAttendeeId" class="picker-item-tag active">当前</text>
@@ -142,8 +142,8 @@ onLoad(async (options: any) => {
       seatList.value.push({ label: `通票 ${i + 1}`, price: perPrice, attendee: null })
     }
   } else {
-    const labels = (options?.seat_labels || '').split(',').filter(Boolean)
-    const seatIds = (options?.seat_ids || '').split(',').filter(Boolean).map(Number)
+    const labels = (options?.seatLabels || '').split(',').filter(Boolean)
+    const seatIds = (options?.seatIds || '').split(',').filter(Boolean).map(Number)
     const perPrice = count > 0 ? amount / count : 0
     labels.forEach((label: string, i: number) => {
       seatList.value.push({ label, price: perPrice, seatId: seatIds[i], attendee: null })
@@ -184,7 +184,7 @@ function autoAssignAttendees() {
     if (seat.attendee) continue
     const available = allAttendees.value.find((a: any) => !usedIds.has(a.id))
     if (available) {
-      seat.attendee = { id: available.id, name: available.name, masked: available.id_card_masked || '' }
+      seat.attendee = { id: available.id, name: available.name, masked: available.idCardMasked || '' }
       usedIds.add(available.id)
     }
   }
@@ -210,7 +210,7 @@ function selectAttendee(a: any) {
   }
   const idx = currentPickerIndex.value
   if (idx >= 0) {
-    seatList.value[idx].attendee = { id: a.id, name: a.name, masked: a.id_card_masked || '' }
+    seatList.value[idx].attendee = { id: a.id, name: a.name, masked: a.idCardMasked || '' }
   }
   closePicker()
 }

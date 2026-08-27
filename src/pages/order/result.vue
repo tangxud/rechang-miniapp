@@ -8,9 +8,9 @@
     <text v-else class="result-desc">{{ errorMsg || '请稍后重试' }}</text>
 
     <view v-if="order" class="order-card">
-      <view class="order-row"><text class="order-label">订单号</text><text class="order-value">{{ order.order_no }}</text></view>
+      <view class="order-row"><text class="order-label">订单号</text><text class="order-value">{{ order.orderNo }}</text></view>
       <view class="order-row"><text class="order-label">支付方式</text><text class="order-value">{{ payChannelText }}</text></view>
-      <view class="order-row"><text class="order-label">订单金额</text><text class="order-value">¥{{ formatPrice(order.total_amount) }}</text></view>
+      <view class="order-row"><text class="order-label">订单金额</text><text class="order-value">¥{{ formatPrice(order.totalAmount) }}</text></view>
     </view>
 
     <view class="note-blue">📱 入场时请在票夹出示电子票二维码</view>
@@ -33,7 +33,7 @@ const isSuccess = ref(true)
 const errorMsg = ref('')
 
 const payChannelText = computed(() => {
-  const ch = order.value?.pay_channel
+  const ch = order.value?.payChannel
   if (ch === 'WECHAT') return '微信支付'
   if (ch === 'ALIPAY') return '支付宝'
   return ch || '微信支付'

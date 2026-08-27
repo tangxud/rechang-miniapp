@@ -56,18 +56,18 @@
 
       <view v-if="dayShows.length > 0" class="cal-list">
         <view
-          v-for="item in dayShows" :key="item.performance_id"
-          class="perf-row" @tap="goDetail(item.performance_id || item.id)"
+          v-for="item in dayShows" :key="item.performanceId"
+          class="perf-row" @tap="goDetail(item.performanceId || item.id)"
         >
-          <image class="perf-poster" :src="item.poster_url" mode="aspectFill" />
+          <image class="perf-poster" :src="item.posterUrl" mode="aspectFill" />
           <view class="perf-info">
-            <text class="perf-name">{{ item.name || item.perf_name }}</text>
-            <text class="perf-sub">{{ formatTime(item.start_at) }} · {{ item.venue_name || '' }}</text>
+            <text class="perf-name">{{ item.name || item.perfName }}</text>
+            <text class="perf-sub">{{ formatTime(item.startAt) }} · {{ item.venueName || '' }}</text>
             <view class="perf-tags">
-              <text class="tag">{{ getTypeLabel(item.show_type || item.perf_type) }}</text>
+              <text class="tag">{{ getTypeLabel(item.showType || item.perfType) }}</text>
             </view>
           </view>
-          <text class="perf-price" :class="{ 'price-hot': item.is_hot_sale }">¥{{ Math.floor((item.min_price || 0) / 100) }}起</text>
+          <text class="perf-price" :class="{ 'price-hot': item.isHotSale }">¥{{ Math.floor((item.minPrice || 0) / 100) }}起</text>
         </view>
       </view>
       <empty-state v-else text="该日期暂无演出" />
@@ -110,16 +110,16 @@
 
       <view v-if="nearbyList.length > 0" class="nearby-list">
         <view
-          v-for="item in nearbyList" :key="item.performance_id"
-          class="perf-row" @tap="goDetail(item.performance_id)"
+          v-for="item in nearbyList" :key="item.performanceId"
+          class="perf-row" @tap="goDetail(item.performanceId)"
         >
-          <image class="perf-poster-sm" :src="item.poster_url" mode="aspectFill" />
+          <image class="perf-poster-sm" :src="item.posterUrl" mode="aspectFill" />
           <view class="perf-info">
             <text class="perf-name">{{ item.name }}</text>
-            <text class="perf-sub">{{ item.venue_name }} · 距您 {{ (item.distance || 0).toFixed(1) }}km</text>
-            <text class="perf-date">{{ formatDate(item.start_at) }}</text>
+            <text class="perf-sub">{{ item.venueName }} · 距您 {{ (item.distance || 0).toFixed(1) }}km</text>
+            <text class="perf-date">{{ formatDate(item.startAt) }}</text>
           </view>
-          <text class="perf-price" :class="{ 'price-hot': item.is_hot_sale }">¥{{ Math.floor(item.min_price / 100) }}起</text>
+          <text class="perf-price" :class="{ 'price-hot': item.isHotSale }">¥{{ Math.floor(item.minPrice / 100) }}起</text>
         </view>
       </view>
       <empty-state v-else text="附近暂无演出" />
@@ -140,25 +140,25 @@
       <!-- TOP 3 领奖台 -->
       <view v-if="rankingList.length >= 3" class="podium">
         <!-- 第2名 -->
-        <view class="podium-item" @tap="goDetail(rankingList[1].performance_id)">
+        <view class="podium-item" @tap="goDetail(rankingList[1].performanceId)">
           <view class="podium-medal">🥈</view>
-          <image class="podium-avatar sm" :src="rankingList[1].poster_url" mode="aspectFill" />
+          <image class="podium-avatar sm" :src="rankingList[1].posterUrl" mode="aspectFill" />
           <text class="podium-name">{{ truncate(rankingList[1].name, 8) }}</text>
-          <text class="podium-score">热度 {{ rankingList[1].hot_score }}</text>
+          <text class="podium-score">热度 {{ rankingList[1].hotScore }}</text>
         </view>
         <!-- 第1名 -->
-        <view class="podium-item" @tap="goDetail(rankingList[0].performance_id)">
+        <view class="podium-item" @tap="goDetail(rankingList[0].performanceId)">
           <view class="podium-medal lg">🥇</view>
-          <image class="podium-avatar lg" :src="rankingList[0].poster_url" mode="aspectFill" />
+          <image class="podium-avatar lg" :src="rankingList[0].posterUrl" mode="aspectFill" />
           <text class="podium-name bold">{{ truncate(rankingList[0].name, 8) }}</text>
-          <text class="podium-score">热度 {{ rankingList[0].hot_score }}</text>
+          <text class="podium-score">热度 {{ rankingList[0].hotScore }}</text>
         </view>
         <!-- 第3名 -->
-        <view class="podium-item" @tap="goDetail(rankingList[2].performance_id)">
+        <view class="podium-item" @tap="goDetail(rankingList[2].performanceId)">
           <view class="podium-medal">🥉</view>
-          <image class="podium-avatar sm" :src="rankingList[2].poster_url" mode="aspectFill" />
+          <image class="podium-avatar sm" :src="rankingList[2].posterUrl" mode="aspectFill" />
           <text class="podium-name">{{ truncate(rankingList[2].name, 8) }}</text>
-          <text class="podium-score">热度 {{ rankingList[2].hot_score }}</text>
+          <text class="podium-score">热度 {{ rankingList[2].hotScore }}</text>
         </view>
       </view>
 
@@ -168,22 +168,22 @@
       <!-- 排行列表 4+ -->
       <view class="rank-list">
         <view
-          v-for="item in rankingList.slice(3)" :key="item.performance_id"
-          class="perf-row" @tap="goDetail(item.performance_id)"
+          v-for="item in rankingList.slice(3)" :key="item.performanceId"
+          class="perf-row" @tap="goDetail(item.performanceId)"
         >
           <text class="rank-num">{{ item.rank }}</text>
-          <image class="perf-poster-sm" :src="item.poster_url" mode="aspectFill" />
+          <image class="perf-poster-sm" :src="item.posterUrl" mode="aspectFill" />
           <view class="perf-info">
             <text class="perf-name">{{ item.name }}</text>
-            <text class="perf-sub">{{ formatDate(item.start_at) }} · {{ item.venue_name }}</text>
+            <text class="perf-sub">{{ formatDate(item.startAt) }} · {{ item.venueName }}</text>
             <view class="score-bar-wrap">
               <view class="score-bar-bg">
-                <view class="score-bar" :style="{ width: scorePercent(item.hot_score) + '%', background: scoreColor(item.hot_score) }"></view>
+                <view class="score-bar" :style="{ width: scorePercent(item.hotScore) + '%', background: scoreColor(item.hotScore) }"></view>
               </view>
-              <text class="score-text">{{ item.hot_score }}</text>
+              <text class="score-text">{{ item.hotScore }}</text>
             </view>
           </view>
-          <text class="perf-price">¥{{ Math.floor(item.min_price / 100) }}起</text>
+          <text class="perf-price">¥{{ Math.floor(item.minPrice / 100) }}起</text>
         </view>
       </view>
     </scroll-view>
@@ -240,7 +240,7 @@ const calendarDays = computed(() => {
   for (let i = 1; i <= daysInMonth; i++) {
     const dateStr = `${calYear.value}-${String(calMonth.value + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`
     const hasShow = allShows.value.some(s => {
-      const sd = s.start_at || ''
+      const sd = s.startAt || ''
       return sd.startsWith(dateStr)
     })
     days.push({ num: i, date: dateStr, inMonth: true, hasShow })
@@ -250,7 +250,7 @@ const calendarDays = computed(() => {
 
 const dayShows = computed(() => {
   return allShows.value.filter(s => {
-    const sd = s.start_at || ''
+    const sd = s.startAt || ''
     return sd.startsWith(selectedDate.value)
   })
 })
@@ -309,7 +309,7 @@ function truncate(s: string, n: number) {
   return s && s.length > n ? s.substring(0, n) + '...' : s
 }
 function scorePercent(score: number) {
-  const max = rankingList.value[0]?.hot_score || 1
+  const max = rankingList.value[0]?.hotScore || 1
   return Math.max(10, Math.floor((score / max) * 100))
 }
 function scoreColor(score: number) {

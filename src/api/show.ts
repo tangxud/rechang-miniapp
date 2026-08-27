@@ -18,7 +18,7 @@ export function getShowDetail(id: number) {
 }
 
 export function toggleSubscribe(id: number, subType: string) {
-  return request({ url: `/api/shows/${id}/subscribe`, method: 'POST', data: { sub_type: subType } })
+  return request({ url: `/api/shows/${id}/subscribe`, method: 'POST', data: { subType: subType } })
 }
 
 export function toggleWant(id: number) {

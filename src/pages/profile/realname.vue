@@ -143,11 +143,11 @@ onLoad(() => {
 async function loadStatus() {
   try {
     const data: any = await getRealnameStatus()
-    const status = data.status || data.realname_status || ''
+    const status = data.status || ''
     serverStatus.value = status
-    if (status === 'APPROVED') {
-      verifiedName.value = data.name || ''
-      verifiedIdCard.value = data.id_card_no || data.idCardNo || ''
+    if (status === 'VERIFIED') {  // 后端实名状态枚举：UNVERIFIED / VERIFIED
+      verifiedName.value = data.realName || ''
+      verifiedIdCard.value = data.idCardMasked || ''
     }
   } catch (e) {
     serverStatus.value = userStore.realnameStatus

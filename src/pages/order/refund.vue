@@ -8,11 +8,11 @@
       <template v-if="!loading && order">
         <!-- 演出信息 -->
         <view class="card perf-card">
-          <image class="poster" :src="order.poster_url || placeholder" mode="aspectFill" />
+          <image class="poster" :src="order.posterUrl || placeholder" mode="aspectFill" />
           <view class="perf-info">
-            <text class="perf-name">{{ order.performance_name }}</text>
-            <text class="order-no">订单号 {{ order.order_no }}</text>
-            <text class="order-amount">支付金额 ¥{{ formatPrice(order.total_amount) }}</text>
+            <text class="perf-name">{{ order.performanceName }}</text>
+            <text class="order-no">订单号 {{ order.orderNo }}</text>
+            <text class="order-amount">支付金额 ¥{{ formatPrice(order.totalAmount) }}</text>
           </view>
         </view>
 
@@ -24,25 +24,25 @@
               <text v-if="selectedTickets.includes(t.id)" class="check-icon">✓</text>
             </view>
             <view class="ticket-info">
-              <text class="ticket-seat">{{ t.seat_label }}</text>
-              <text class="ticket-attendee">{{ t.attendee_name || '未绑定观演人' }}</text>
+              <text class="ticket-seat">{{ t.seatLabel }}</text>
+              <text class="ticket-attendee">{{ t.attendeeName || '未绑定观演人' }}</text>
             </view>
-            <text class="ticket-price">¥{{ formatPrice(t.face_amount) }}</text>
+            <text class="ticket-price">¥{{ formatPrice(t.faceAmount) }}</text>
           </view>
         </view>
 
         <!-- 退票预览 -->
         <view v-if="selectedTickets.length > 0" class="card">
           <text class="card-title">退票明细</text>
-          <view v-for="p in previews" :key="p.ticket_id" class="preview-row">
+          <view v-for="p in previews" :key="p.ticketId" class="preview-row">
             <view class="preview-left">
-              <text class="preview-seat">{{ p.seat_label }}</text>
-              <text class="preview-stage" :class="stageClass(p.stage)">{{ p.stage_desc }}</text>
+              <text class="preview-seat">{{ p.seatLabel }}</text>
+              <text class="preview-stage" :class="stageClass(p.stage)">{{ p.stageDesc }}</text>
             </view>
             <view class="preview-right">
-              <text v-if="p.fee_amount > 0" class="preview-fee">手续费 ¥{{ formatPrice(p.fee_amount) }}</text>
+              <text v-if="p.feeAmount > 0" class="preview-fee">手续费 ¥{{ formatPrice(p.feeAmount) }}</text>
               <text v-else class="preview-fee free">无手续费</text>
-              <text class="preview-refund">退 ¥{{ formatPrice(p.refund_amount) }}</text>
+              <text class="preview-refund">退 ¥{{ formatPrice(p.refundAmount) }}</text>
             </view>
           </view>
 
@@ -88,8 +88,8 @@
           <text class="card-title">退款记录</text>
           <view v-for="r in refundRecords" :key="r.id" class="record-row">
             <view class="record-left">
-              <text class="record-no">{{ r.refund_no }}</text>
-              <text class="record-type">{{ refundTypeLabel(r.refund_type) }} · ¥{{ formatPrice(r.refund_amount) }}</text>
+              <text class="record-no">{{ r.refundNo }}</text>
+              <text class="record-type">{{ refundTypeLabel(r.refundType) }} · ¥{{ formatPrice(r.refundAmount) }}</text>
             </view>
             <text class="record-status" :class="recordStatusClass(r.status)">{{ recordStatusLabel(r.status) }}</text>
           </view>
@@ -131,9 +131,9 @@ const refundType = ref('PERSONAL')
 const reason = ref('')
 const evidenceUrls = ref<string[]>([])
 
-const totalTicketAmount = computed(() => previews.value.reduce((s, p) => s + (p.ticket_amount || 0), 0))
-const totalFee = computed(() => previews.value.reduce((s, p) => s + (p.fee_amount || 0), 0))
-const totalRefund = computed(() => previews.value.reduce((s, p) => s + (p.refund_amount || 0), 0))
+const totalTicketAmount = computed(() => previews.value.reduce((s, p) => s + (p.ticketAmount || 0), 0))
+const totalFee = computed(() => previews.value.reduce((s, p) => s + (p.feeAmount || 0), 0))
+const totalRefund = computed(() => previews.value.reduce((s, p) => s + (p.refundAmount || 0), 0))
 const estimatedArrival = computed(() => refundType.value === 'FORCE_MAJEURE' ? '审核通过后3-7个工作日' : '3-7个工作日')
 
 onLoad((options: any) => {
@@ -169,7 +169,7 @@ async function toggleTicket(ticket: any) {
   const idx = selectedTickets.value.indexOf(ticket.id)
   if (idx >= 0) {
     selectedTickets.value.splice(idx, 1)
-    previews.value = previews.value.filter((p: any) => p.ticket_id !== ticket.id)
+    previews.value = previews.value.filter((p: any) => p.ticketId !== ticket.id)
   } else {
     selectedTickets.value.push(ticket.id)
     try {

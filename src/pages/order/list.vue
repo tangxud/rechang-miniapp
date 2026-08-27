@@ -16,16 +16,16 @@
       <view v-else class="order-cards">
         <view v-for="order in list" :key="order.id" class="order-card" @tap="goDetail(order.id)">
           <view class="card-top">
-            <image class="poster" :src="order.poster_url || placeholder" mode="aspectFill" />
+            <image class="poster" :src="order.posterUrl || placeholder" mode="aspectFill" />
             <view class="info">
-              <text class="perf-name">{{ order.performance_name }}</text>
-              <text class="order-no">{{ order.order_no }}</text>
-              <text class="order-date">{{ formatDate(order.create_time) }}</text>
+              <text class="perf-name">{{ order.performanceName }}</text>
+              <text class="order-no">{{ order.orderNo }}</text>
+              <text class="order-date">{{ formatDate(order.createTime) }}</text>
             </view>
             <text class="status-tag" :class="statusClass(order.status)">{{ statusLabel(order.status) }}</text>
           </view>
           <view class="card-bottom">
-            <text class="amount">¥{{ formatPrice(order.total_amount) }}</text>
+            <text class="amount">¥{{ formatPrice(order.totalAmount) }}</text>
             <view class="actions">
               <text v-if="order.status === 'PENDING_PAY'" class="action-text cancel" @tap.stop="onCancel(order)">取消</text>
               <text v-if="order.status === 'PENDING_PAY'" class="action-text pay" @tap.stop="goPay(order)">去支付</text>
@@ -86,7 +86,7 @@ function formatPrice(c: number) { const y = c/100; return Number.isInteger(y)?y.
 function formatDate(d: string) { return d ? d.substring(0,10) : '' }
 
 function goDetail(id: number) { uni.navigateTo({ url: `/pages/order/detail?id=${id}` }) }
-function goPay(order: any) { uni.navigateTo({ url: `/pages/order/pay?id=${order.id}&amount=${order.total_amount}` }) }
+function goPay(order: any) { uni.navigateTo({ url: `/pages/order/pay?id=${order.id}&amount=${order.totalAmount}` }) }
 function goTickets() { uni.switchTab({ url: '/pages/tickets/index' }) }
 function goBack() { uni.navigateBack() }
 function toastDev(msg: string) { uni.showToast({ title: msg, icon: 'none' }) }

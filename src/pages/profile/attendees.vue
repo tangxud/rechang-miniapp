@@ -21,7 +21,7 @@
       <view v-for="item in list" :key="item.id" class="attendee-card">
         <view class="attendee-info" @tap="goEdit(item)">
           <text class="attendee-name">{{ item.name }}</text>
-          <text class="attendee-idcard">{{ maskIdCard(item.id_card_masked || '') }}</text>
+          <text class="attendee-idcard">{{ maskIdCard(item.idCardMasked || '') }}</text>
         </view>
         <view class="attendee-actions">
           <view class="action-btn" @tap="goEdit(item)">
@@ -72,7 +72,7 @@ function goAdd() {
 }
 
 function goEdit(item: any) {
-  const idCard = item.id_card_masked || ''
+  const idCard = item.idCardMasked || ''
   uni.navigateTo({
     url: `/pages/profile/attendee-edit?id=${item.id}&name=${encodeURIComponent(item.name)}&idcard=${encodeURIComponent(idCard)}`
   })

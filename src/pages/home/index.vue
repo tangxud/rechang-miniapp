@@ -23,7 +23,7 @@
       :circular="true"
     >
       <swiper-item v-for="b in banners" :key="b.id" @tap="onBanner(b)">
-        <image class="banner-img" :src="b.image_url || placeholder" mode="aspectFill" />
+        <image class="banner-img" :src="b.imageUrl || placeholder" mode="aspectFill" />
       </swiper-item>
     </swiper>
 
@@ -36,11 +36,11 @@
         <view class="h-list">
           <view
             v-for="item in upcoming"
-            :key="item.performance_id"
+            :key="item.performanceId"
             class="upcoming-card"
-            @tap="goDetail(item.performance_id)"
+            @tap="goDetail(item.performanceId)"
           >
-            <image class="upcoming-poster" :src="item.poster_url || placeholder" mode="aspectFill" />
+            <image class="upcoming-poster" :src="item.posterUrl || placeholder" mode="aspectFill" />
             <text class="upcoming-name">{{ item.name }}</text>
             <view class="upcoming-cd">
               <text class="cd-label">距开票</text>
@@ -61,13 +61,13 @@
         <view class="h-list">
           <view
             v-for="item in recommended"
-            :key="item.performance_id"
+            :key="item.performanceId"
             class="rec-card"
-            @tap="goDetail(item.performance_id)"
+            @tap="goDetail(item.performanceId)"
           >
-            <image class="rec-poster" :src="item.poster_url || placeholder" mode="aspectFill" />
+            <image class="rec-poster" :src="item.posterUrl || placeholder" mode="aspectFill" />
             <text class="rec-name">{{ item.name }}</text>
-            <text class="rec-price">{{ formatPrice(item.min_price) }}</text>
+            <text class="rec-price">{{ formatPrice(item.minPrice) }}</text>
           </view>
         </view>
       </scroll-view>
@@ -78,7 +78,7 @@
       <view class="section-header">
         <text class="section-title">热门演出</text>
       </view>
-      <PerformanceCard v-for="item in hotList" :key="item.performance_id" :item="item" />
+      <PerformanceCard v-for="item in hotList" :key="item.performanceId" :item="item" />
     </view>
 
     <EmptyState v-if="!loading && !banners.length && !hotList.length" text="暂无演出数据" />
@@ -114,7 +114,7 @@ async function loadData() {
     banners.value = data.banners || []
     upcoming.value = data.upcoming || []
     recommended.value = data.recommendations || []
-    hotList.value = data.hot_list || []
+    hotList.value = data.hotList || []
   } catch (e) {
     // error toast handled by request util
   } finally {
@@ -123,8 +123,8 @@ async function loadData() {
 }
 
 function cdSeconds(item: any) {
-  if (!item.sale_start_time) return 0
-  const diff = Math.floor((new Date(item.sale_start_time).getTime() - Date.now()) / 1000)
+  if (!item.saleStartTime) return 0
+  const diff = Math.floor((new Date(item.saleStartTime).getTime() - Date.now()) / 1000)
   return diff > 0 ? diff : 0
 }
 
@@ -143,8 +143,8 @@ function goDetail(id: number) {
 }
 
 function onBanner(b: any) {
-  if (b.link_type === 'PERFORMANCE' && b.link_id) {
-    uni.navigateTo({ url: `/pages/detail/index?id=${b.link_id}` })
+  if (b.linkType === 'PERFORMANCE' && b.linkId) {
+    uni.navigateTo({ url: `/pages/detail/index?id=${b.linkId}` })
   }
 }
 

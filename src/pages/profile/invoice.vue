@@ -19,17 +19,17 @@
           class="card"
         >
           <view class="order-info">
-            <image class="poster" :src="order.poster_url || placeholder" mode="aspectFill" />
+            <image class="poster" :src="order.posterUrl || placeholder" mode="aspectFill" />
             <view class="order-detail">
-              <text class="perf-name">{{ order.performance_name }}</text>
-              <text class="order-no">订单号 {{ order.order_no }}</text>
-              <text class="order-amount">¥{{ formatPrice(order.total_amount) }}</text>
+              <text class="perf-name">{{ order.performanceName }}</text>
+              <text class="order-no">订单号 {{ order.orderNo }}</text>
+              <text class="order-amount">¥{{ formatPrice(order.totalAmount) }}</text>
             </view>
             <text class="status-tag st-green">可开票</text>
           </view>
 
           <view v-if="order.invoice" class="invoice-done">
-            <text class="done-text">已开具发票 {{ order.invoice.invoice_no }}</text>
+            <text class="done-text">已开具发票 {{ order.invoice.invoiceNo }}</text>
             <text class="download-link" @tap="downloadInvoice(order.invoice.id)">下载</text>
           </view>
           <view v-else class="invoice-form">
@@ -75,7 +75,7 @@
             </view>
             <view class="amount-row">
               <text class="amount-label">开票金额</text>
-              <text class="amount-value">¥{{ formatPrice(order.total_amount) }}</text>
+              <text class="amount-value">¥{{ formatPrice(order.totalAmount) }}</text>
             </view>
             <text class="note">电子普通发票 · 开具后不可修改</text>
             <view class="submit-btn-wrap">
@@ -104,8 +104,8 @@
           class="invoice-item"
         >
           <view class="inv-info">
-            <text class="inv-no">{{ inv.invoice_no }}</text>
-            <text class="inv-title">{{ inv.invoice_title }} · ¥{{ formatPrice(inv.amount) }}</text>
+            <text class="inv-no">{{ inv.invoiceNo }}</text>
+            <text class="inv-title">{{ inv.invoiceTitle }} · ¥{{ formatPrice(inv.amount) }}</text>
           </view>
           <view class="inv-actions">
             <text class="status-tag" :class="statusClass(inv.status)">{{ statusLabel(inv.status) }}</text>

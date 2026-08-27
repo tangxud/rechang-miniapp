@@ -29,25 +29,25 @@
             <!-- 上半部分：演出信息 -->
             <view class="ticket-top">
               <view class="perf-header">
-                <text class="perf-name">{{ item.performance_name }}</text>
+                <text class="perf-name">{{ item.performanceName }}</text>
                 <text class="perf-type">{{ getTypeLabel(item) }}</text>
               </view>
               <view class="info-grid">
                 <view class="info-cell">
                   <text class="cell-label">日期</text>
-                  <text class="cell-value">{{ formatDate(item.start_at) }}</text>
+                  <text class="cell-value">{{ formatDate(item.startAt) }}</text>
                 </view>
                 <view class="info-cell">
                   <text class="cell-label">时间</text>
-                  <text class="cell-value">{{ formatTime(item.start_at) }}</text>
+                  <text class="cell-value">{{ formatTime(item.startAt) }}</text>
                 </view>
                 <view class="info-cell">
                   <text class="cell-label">场馆</text>
-                  <text class="cell-value">{{ item.venue_name }}</text>
+                  <text class="cell-value">{{ item.venueName }}</text>
                 </view>
                 <view class="info-cell">
                   <text class="cell-label">座位</text>
-                  <text class="cell-value seat-value">{{ item.seat_label }}</text>
+                  <text class="cell-value seat-value">{{ item.seatLabel }}</text>
                 </view>
               </view>
             </view>
@@ -64,12 +64,12 @@
               <view class="bottom-left">
                 <view class="amount-row">
                   <text class="amount-label">票面金额</text>
-                  <text class="amount-value">¥{{ formatPrice(item.face_amount) }}</text>
+                  <text class="amount-value">¥{{ formatPrice(item.faceAmount) }}</text>
                 </view>
-                <text v-if="item.zone_name" class="zone-tag">{{ item.zone_name }}</text>
-                <view v-if="item.attendee_id_card_masked" class="attendee-row">
+                <text v-if="item.zoneName" class="zone-tag">{{ item.zoneName }}</text>
+                <view v-if="item.attendeeIdCardMasked" class="attendee-row">
                   <text class="attendee-label">实名</text>
-                  <text class="attendee-value">{{ item.attendee_id_card_masked }}</text>
+                  <text class="attendee-value">{{ item.attendeeIdCardMasked }}</text>
                 </view>
               </view>
               <view class="bottom-right">
@@ -96,7 +96,7 @@
               <view class="t-action-divider"></view>
               <view class="t-action" @tap="goDetail(item)"><text class="t-action-text">📋 演出详情</text></view>
             </view>
-            <view v-if="item.status === 'USED' && item.order_status === 'REVIEWED'" class="ticket-actions">
+            <view v-if="item.status === 'USED' && item.orderStatus === 'REVIEWED'" class="ticket-actions">
               <view class="t-action" @tap="goMyReview(item)"><text class="t-action-text">📖 查看评价</text></view>
               <view class="t-action-divider"></view>
               <view class="t-action" @tap="goDetail(item)"><text class="t-action-text">📋 演出详情</text></view>
@@ -169,14 +169,14 @@ function stampText(status: string) {
 }
 
 function showQrcode(item: any) {
-  uni.navigateTo({ url: `/pages/tickets/qrcode?id=${item.id}&name=${encodeURIComponent(item.performance_name)}` })
+  uni.navigateTo({ url: `/pages/tickets/qrcode?id=${item.id}&name=${encodeURIComponent(item.performanceName)}` })
 }
 function onTransfer(item: any) {
   uni.showLoading({ title: '生成转赠链接...' })
   startTransfer(item.id)
     .then((res: any) => {
       uni.hideLoading()
-      const token = res?.transfer_token || res?.transferToken || ''
+      const token = res?.transferToken || ''
       if (!token) { uni.showToast({ title: '生成失败', icon: 'none' }); return }
       showTransferModal(item, token)
     })
@@ -196,22 +196,22 @@ function showTransferModal(item: any, token: string) {
     }
   })
 }
-function goDetail(item: any) { uni.navigateTo({ url: `/pages/detail/index?id=${item.performance_id}` }) }
+function goDetail(item: any) { uni.navigateTo({ url: `/pages/detail/index?id=${item.performanceId}` }) }
 function goLogin() { uni.navigateTo({ url: '/pages/profile/login' }) }
 
 function canReview(item: any) {
-  if (item.order_status !== 'ATTENDED') return false
-  if (!item.end_at) return false
-  return new Date(item.end_at).getTime() < Date.now()
+  if (item.orderStatus !== 'ATTENDED') return false
+  if (!item.endAt) return false
+  return new Date(item.endAt).getTime() < Date.now()
 }
 function goReview(item: any) {
-  uni.navigateTo({ url: `/pages/review/post?perfId=${item.performance_id}` })
+  uni.navigateTo({ url: `/pages/review/post?perfId=${item.performanceId}` })
 }
 function goMyReview(item: any) {
-  if (item.review_id) {
-    uni.navigateTo({ url: `/pages/review/detail?id=${item.review_id}&perfId=${item.performance_id}` })
+  if (item.reviewId) {
+    uni.navigateTo({ url: `/pages/review/detail?id=${item.reviewId}&perfId=${item.performanceId}` })
   } else {
-    uni.navigateTo({ url: `/pages/review/list?id=${item.performance_id}` })
+    uni.navigateTo({ url: `/pages/review/list?id=${item.performanceId}` })
   }
 }
 </script>

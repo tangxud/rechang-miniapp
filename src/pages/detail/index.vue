@@ -4,7 +4,7 @@
 
     <template v-if="detail">
       <!-- Poster -->
-      <image class="poster" :src="detail.poster_url || placeholder" mode="aspectFill" />
+      <image class="poster" :src="detail.posterUrl || placeholder" mode="aspectFill" />
 
       <!-- Countdown banner -->
       <view v-if="cdSeconds > 0" class="cd-banner">
@@ -20,25 +20,25 @@
         </view>
         <view class="info-row">
           <text class="info-label">时间</text>
-          <text class="info-value">{{ formatDateTime(detail.start_at) }}</text>
+          <text class="info-value">{{ formatDateTime(detail.startAt) }}</text>
         </view>
-        <view v-if="detail.end_at" class="info-row">
+        <view v-if="detail.endAt" class="info-row">
           <text class="info-label">结束</text>
-          <text class="info-value">{{ formatDateTime(detail.end_at) }}</text>
+          <text class="info-value">{{ formatDateTime(detail.endAt) }}</text>
         </view>
         <view class="info-row">
           <text class="info-label">场馆</text>
-          <text class="info-value">{{ detail.venue?.venue_name || '待定' }}</text>
+          <text class="info-value">{{ detail.venue?.venueName || '待定' }}</text>
         </view>
-        <view v-if="detail.artist?.artist_name" class="info-row">
+        <view v-if="detail.artist?.artistName" class="info-row">
           <text class="info-label">艺人</text>
-          <text class="info-value">{{ detail.artist.artist_name }}</text>
+          <text class="info-value">{{ detail.artist.artistName }}</text>
         </view>
-        <view v-if="detail.tour_name" class="info-row">
+        <view v-if="detail.tourName" class="info-row">
           <text class="info-label">巡演</text>
-          <text class="info-value">{{ detail.tour_name }}</text>
+          <text class="info-value">{{ detail.tourName }}</text>
         </view>
-        <view v-if="detail.is_strong_real_name" class="realname-tip">
+        <view v-if="detail.isStrongRealName" class="realname-tip">
           <text class="realname-tip-text">本场演出需强实名认证，入场需人脸核验</text>
         </view>
       </view>
@@ -48,8 +48,8 @@
         <text class="card-title">票价区域</text>
         <view v-for="(zone, i) in priceZones" :key="i" class="zone-row">
           <view class="zone-left">
-            <text class="zone-name">{{ zone.zone_name || zone.region }}</text>
-            <text v-if="zone.total_count != null" class="zone-count">余票 {{ zone.total_count }}</text>
+            <text class="zone-name">{{ zone.zoneName || zone.region }}</text>
+            <text v-if="zone.totalCount != null" class="zone-count">余票 {{ zone.totalCount }}</text>
           </view>
           <text class="zone-price">{{ formatPrice(zone.price) }}</text>
         </view>
@@ -65,15 +65,15 @@
       <view class="section-card" @tap="goReviewList">
         <view class="card-header">
           <text class="card-title">口碑评价</text>
-          <text v-if="reviewSummary && reviewSummary.total_reviews > 0" class="card-more">查看全部 ›</text>
+          <text v-if="reviewSummary && reviewSummary.totalReviews > 0" class="card-more">查看全部 ›</text>
         </view>
-        <view v-if="reviewSummary && reviewSummary.total_reviews >= 50" class="review-summary">
+        <view v-if="reviewSummary && reviewSummary.totalReviews >= 50" class="review-summary">
           <view class="rating-row">
-            <text class="rating-num">{{ reviewSummary.avg_rating?.toFixed(1) || '0.0' }}</text>
+            <text class="rating-num">{{ reviewSummary.avgRating?.toFixed(1) || '0.0' }}</text>
             <view class="rating-stars">
-              <text v-for="i in 5" :key="i" class="star" :class="{ filled: i <= Math.round(reviewSummary.avg_rating || 0) }">★</text>
+              <text v-for="i in 5" :key="i" class="star" :class="{ filled: i <= Math.round(reviewSummary.avgRating || 0) }">★</text>
             </view>
-            <text class="rating-total">{{ reviewSummary.total_reviews }} 条评价</text>
+            <text class="rating-total">{{ reviewSummary.totalReviews }} 条评价</text>
           </view>
           <view v-if="reviewTags.length" class="tag-row">
             <view v-for="(tag, i) in reviewTags" :key="i" class="review-tag">
@@ -133,19 +133,19 @@ const isSubscribed = ref(false)
 const cdSeconds = ref(0)
 let ws: CountdownWS | null = null
 
-const typeLabel = computed(() => TYPE_LABELS[detail.value?.show_type] || '')
-const priceZones = computed(() => detail.value?.price_zones || [])
-const reviewSummary = computed(() => detail.value?.review_summary || null)
-const reviewTags = computed(() => reviewSummary.value?.top_tags || [])
+const typeLabel = computed(() => TYPE_LABELS[detail.value?.showType] || '')
+const priceZones = computed(() => detail.value?.priceZones || [])
+const reviewSummary = computed(() => detail.value?.reviewSummary || null)
+const reviewTags = computed(() => reviewSummary.value?.topTags || [])
 
 async function loadDetail() {
   loading.value = true
   try {
     const data: any = await getShowDetail(perfId.value)
     detail.value = data
-    isWanted.value = !!data.is_wanted
-    wantCount.value = data.want_count || 0
-    initCountdown(data.sale_start_time)
+    isWanted.value = !!data.isWanted
+    wantCount.value = data.wantCount || 0
+    initCountdown(data.saleStartTime)
   } catch (e) {
     // error handled by request util
   } finally {
@@ -161,7 +161,7 @@ function initCountdown(saleStartTime: string) {
   if (diff > 0) {
     cdSeconds.value = diff
     ws = new CountdownWS(perfId.value, (data: any) => {
-      const s = data.remainingSeconds ?? data.seconds ?? data.countdown
+      const s = data.countdownSeconds  // 后端 CountdownWebSocketHandler 的字段名
       if (typeof s === 'number' && s >= 0) cdSeconds.value = s
     })
     ws.connect()

@@ -9,7 +9,7 @@ export function refundTicket(orderId: number, ticketId: number, reason: string) 
 }
 
 export function refundForceMajeure(orderId: number, ticketId: number, reason: string, evidenceUrls: string[]) {
-  return request({ url: `/api/orders/${orderId}/tickets/${ticketId}/refund/force-majeure`, method: 'POST', data: { reason, evidence_urls: evidenceUrls } })
+  return request({ url: `/api/orders/${orderId}/tickets/${ticketId}/refund/force-majeure`, method: 'POST', data: { reason, evidenceUrls: evidenceUrls } })
 }
 
 export function getRefundRecords(orderId: number) {

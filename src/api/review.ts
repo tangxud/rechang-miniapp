@@ -31,5 +31,5 @@ export function submitReply(reviewId: number, content: string) {
 }
 
 export function reportReview(reviewId: number, reportType: string, reason: string) {
-  return request({ url: `/api/reviews/${reviewId}/reports`, method: 'POST', data: { report_type: reportType, reason } })
+  return request({ url: `/api/reviews/${reviewId}/reports`, method: 'POST', data: { reportType: reportType, reason } })
 }

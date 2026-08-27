@@ -7,7 +7,7 @@
 
     <scroll-view scroll-y class="result-scroll" @scrolltolower="loadMore">
       <view class="result-list">
-        <PerformanceCard v-for="item in list" :key="item.performance_id" :item="item" />
+        <PerformanceCard v-for="item in list" :key="item.performanceId" :item="item" />
       </view>
 
       <EmptyState v-if="!loading && !list.length" text="未找到相关演出" />

@@ -9,10 +9,10 @@ export function createOrder(data: {
   return request({
     url: '/api/orders', method: 'POST',
     data: {
-      performance_id: data.performanceId,
-      seat_ids: data.seatIds || [],
-      standing_count: data.standingCount,
-      attendees: data.attendees.map(a => ({ attendee_id: a.attendeeId }))
+      performanceId: data.performanceId,
+      seatIds: data.seatIds || [],
+      standingCount: data.standingCount,
+      attendees: data.attendees.map(a => ({ attendeeId: a.attendeeId }))
     }
   })
 }

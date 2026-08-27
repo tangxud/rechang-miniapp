@@ -42,7 +42,7 @@ onLoad((options: any) => {
 async function refresh() {
   try {
     const data: any = await getTicketQrcode(ticketId.value)
-    qrPattern.value = generatePattern(data.qr_content || '')
+    qrPattern.value = generatePattern(data.qrContent || '')
     countdown.value = 30
     expired.value = false
     startTimer()

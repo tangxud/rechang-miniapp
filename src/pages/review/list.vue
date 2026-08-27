@@ -11,12 +11,12 @@
           <view class="rating-stars">
             <text v-for="i in 5" :key="i" class="star" :class="{ filled: i <= Math.round(avgRating) }">★</text>
           </view>
-          <text class="rating-total">{{ summary.total_count }} 条评价</text>
+          <text class="rating-total">{{ summary.totalCount }} 条评价</text>
         </view>
         <view v-if="topTags.length" class="tag-row">
           <view v-for="(tag, i) in topTags" :key="i" class="tag-pill"><text class="tag-text">{{ tag }}</text></view>
         </view>
-        <view v-if="summary.total_count < 50" class="cold-tip"><text class="cold-tip-text">口碑建设中，仅供参考</text></view>
+        <view v-if="summary.totalCount < 50" class="cold-tip"><text class="cold-tip-text">口碑建设中，仅供参考</text></view>
       </view>
 
       <view class="sort-bar">
@@ -25,17 +25,17 @@
       </view>
 
       <scroll-view scroll-y class="review-list" @scrolltolower="loadMore">
-        <view v-for="r in list" :key="r.review_id" class="review-card">
+        <view v-for="r in list" :key="r.reviewId" class="review-card">
           <view class="review-header">
-            <image v-if="r.user_avatar" class="user-avatar" :src="r.user_avatar" mode="aspectFill" />
-            <view v-else class="user-avatar default-avatar"><text class="avatar-text">{{ r.user_nickname?.charAt(0) || '匿' }}</text></view>
+            <image v-if="r.userAvatar" class="user-avatar" :src="r.userAvatar" mode="aspectFill" />
+            <view v-else class="user-avatar default-avatar"><text class="avatar-text">{{ r.userNickname?.charAt(0) || '匿' }}</text></view>
             <view class="user-info">
-              <text class="user-nickname">{{ r.user_nickname }}</text>
+              <text class="user-nickname">{{ r.userNickname }}</text>
               <view class="rating-stars small">
                 <text v-for="i in 5" :key="i" class="star sm" :class="{ filled: i <= (r.rating || 0) }">★</text>
               </view>
             </view>
-            <view v-if="r.site_city" class="site-tag"><text class="site-text">{{ r.site_city }}站</text></view>
+            <view v-if="r.siteCity" class="site-tag"><text class="site-text">{{ r.siteCity }}站</text></view>
           </view>
           <text v-if="r.content" class="review-content">{{ r.content }}</text>
           <view v-if="r.images && r.images.length" class="image-grid">
@@ -46,17 +46,17 @@
           </view>
           <view class="review-footer">
             <view class="footer-btn" @tap="onHelpful(r)">
-              <text class="footer-icon" :class="{ active: r.is_helpful }">{{ r.is_helpful ? '❤️' : '🤍' }}</text>
-              <text class="footer-text">{{ r.helpful_count || 0 }}</text>
+              <text class="footer-icon" :class="{ active: r.isHelpful }">{{ r.isHelpful ? '❤️' : '🤍' }}</text>
+              <text class="footer-text">{{ r.helpfulCount || 0 }}</text>
             </view>
             <view class="footer-btn" @tap="goDetail(r)">
               <text class="footer-icon">💬</text>
-              <text class="footer-text">{{ r.reply_count || 0 }}</text>
+              <text class="footer-text">{{ r.replyCount || 0 }}</text>
             </view>
-            <view v-if="r.is_mine" class="footer-btn danger" @tap="onDelete(r)"><text class="footer-icon">🗑️</text><text class="footer-text">删除</text></view>
+            <view v-if="r.isMine" class="footer-btn danger" @tap="onDelete(r)"><text class="footer-icon">🗑️</text><text class="footer-text">删除</text></view>
             <view v-else class="footer-btn" @tap="onReport(r)"><text class="footer-icon">⚠️</text><text class="footer-text">举报</text></view>
           </view>
-          <text class="review-time">{{ formatTime(r.created_at) }}</text>
+          <text class="review-time">{{ formatTime(r.createdAt) }}</text>
         </view>
         <view v-if="loadingMore" class="loading-more"><text>加载中...</text></view>
         <view v-else-if="!hasMore && list.length" class="no-more"><text>没有更多评价了</text></view>
@@ -88,8 +88,8 @@ const size = 10
 const hasMore = ref(true)
 const perfEnded = ref(false)
 
-const avgRating = computed(() => summary.value?.avg_rating ? Number(summary.value.avg_rating) : 0)
-const topTags = computed(() => (summary.value?.top_tags || []).map((t: any) => typeof t === 'string' ? t : t.tag))
+const avgRating = computed(() => summary.value?.avgRating ? Number(summary.value.avgRating) : 0)
+const topTags = computed(() => (summary.value?.topTags || []).map((t: any) => typeof t === 'string' ? t : t.tag))
 const canReview = computed(() => perfEnded.value)
 
 onLoad((options: any) => {
@@ -144,7 +144,7 @@ async function fetchPage(reset: boolean) {
 async function loadPerfStatus() {
   try {
     const d: any = await getShowDetail(perfId.value)
-    perfEnded.value = d.end_at && new Date(d.end_at).getTime() < Date.now()
+    perfEnded.value = d.endAt && new Date(d.endAt).getTime() < Date.now()
   } catch (e) {}
 }
 
@@ -156,14 +156,14 @@ function switchSort(s: string) {
 
 async function onHelpful(r: any) {
   try {
-    const res: any = await toggleHelpful(r.review_id)
-    r.is_helpful = !!res.is_helpful
-    r.helpful_count = (r.helpful_count || 0) + (r.is_helpful ? 1 : -1)
+    const res: any = await toggleHelpful(r.reviewId)
+    r.isHelpful = !!res.isHelpful
+    r.helpfulCount = (r.helpfulCount || 0) + (r.isHelpful ? 1 : -1)
   } catch (e) {}
 }
 
 function goDetail(r: any) {
-  uni.navigateTo({ url: `/pages/review/detail?id=${r.review_id}&perfId=${perfId.value}` })
+  uni.navigateTo({ url: `/pages/review/detail?id=${r.reviewId}&perfId=${perfId.value}` })
 }
 
 function goPostReview() {
@@ -177,7 +177,7 @@ function onDelete(r: any) {
     success: async (res) => {
       if (!res.confirm) return
       try {
-        await deleteReview(r.review_id)
+        await deleteReview(r.reviewId)
         uni.showToast({ title: '已删除', icon: 'none' })
         refresh()
       } catch (e) {}
@@ -192,7 +192,7 @@ function onReport(r: any) {
       const types = ['SPAM', 'ABUSE', 'FALSE', 'OTHER']
       try {
         const { reportReview } = await import('../../api/review')
-        await reportReview(r.review_id, types[res.tapIndex], '')
+        await reportReview(r.reviewId, types[res.tapIndex], '')
         uni.showToast({ title: '已举报，待审核', icon: 'none' })
       } catch (e) {}
     }

@@ -3,19 +3,19 @@
     <view v-if="loading" class="loading"><text>加载中...</text></view>
 
     <view v-if="preview && !claimed" class="card">
-      <image v-if="preview.poster_url" class="poster" :src="preview.poster_url" mode="aspectFill" />
+      <image v-if="preview.posterUrl" class="poster" :src="preview.posterUrl" mode="aspectFill" />
       <view v-else class="poster placeholder"><text class="poster-text">🎫</text></view>
 
       <view class="info-block">
-        <text class="perf-name">{{ preview.perf_name }}</text>
-        <text class="info-line">📅 {{ formatDateTime(preview.start_at) }}</text>
-        <text v-if="preview.venue_name" class="info-line">📍 {{ preview.venue_name }}</text>
-        <text class="info-line">🎟️ {{ preview.seat_label }}</text>
-        <text class="info-line amount">票面金额 ¥{{ formatPrice(preview.face_amount) }}</text>
+        <text class="perf-name">{{ preview.perfName }}</text>
+        <text class="info-line">📅 {{ formatDateTime(preview.startAt) }}</text>
+        <text v-if="preview.venueName" class="info-line">📍 {{ preview.venueName }}</text>
+        <text class="info-line">🎟️ {{ preview.seatLabel }}</text>
+        <text class="info-line amount">票面金额 ¥{{ formatPrice(preview.faceAmount) }}</text>
       </view>
 
       <view class="giver-row">
-        <text class="giver-text">{{ preview.giver_nickname }} 送你一张演出票</text>
+        <text class="giver-text">{{ preview.giverNickname }} 送你一张演出票</text>
         <text class="expire-text">链接 24 小时内有效</text>
       </view>
 
@@ -59,7 +59,7 @@ const claimed = ref(false)
 
 onLoad((options: any) => {
   userStore.restoreFromStorage()
-  token.value = options?.token || options?.transferToken || ''
+  token.value = options?.token || ''
   if (token.value) loadPreview()
   else { loading.value = false }
 })

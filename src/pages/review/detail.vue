@@ -7,15 +7,15 @@
     <scroll-view v-if="review" scroll-y class="content" @scrolltolower="loadMoreReplies">
       <view class="review-card">
         <view class="review-header">
-          <image v-if="review.user_avatar" class="user-avatar" :src="review.user_avatar" mode="aspectFill" />
-          <view v-else class="user-avatar default-avatar"><text class="avatar-text">{{ review.user_nickname?.charAt(0) || '匿' }}</text></view>
+          <image v-if="review.userAvatar" class="user-avatar" :src="review.userAvatar" mode="aspectFill" />
+          <view v-else class="user-avatar default-avatar"><text class="avatar-text">{{ review.userNickname?.charAt(0) || '匿' }}</text></view>
           <view class="user-info">
-            <text class="user-nickname">{{ review.user_nickname }}</text>
+            <text class="user-nickname">{{ review.userNickname }}</text>
             <view class="rating-stars">
               <text v-for="i in 5" :key="i" class="star" :class="{ filled: i <= (review.rating || 0) }">★</text>
             </view>
           </view>
-          <view v-if="review.site_city" class="site-tag"><text class="site-text">{{ review.site_city }}站</text></view>
+          <view v-if="review.siteCity" class="site-tag"><text class="site-text">{{ review.siteCity }}站</text></view>
         </view>
         <text v-if="review.content" class="review-content">{{ review.content }}</text>
         <view v-if="review.images && review.images.length" class="image-grid">
@@ -26,24 +26,24 @@
         </view>
         <view class="review-footer">
           <view class="footer-btn" @tap="onHelpful">
-            <text class="footer-icon" :class="{ active: review.is_helpful }">{{ review.is_helpful ? '❤️' : '🤍' }}</text>
-            <text class="footer-text">{{ review.helpful_count || 0 }}</text>
+            <text class="footer-icon" :class="{ active: review.isHelpful }">{{ review.isHelpful ? '❤️' : '🤍' }}</text>
+            <text class="footer-text">{{ review.helpfulCount || 0 }}</text>
           </view>
-          <view v-if="review.is_mine" class="footer-btn danger" @tap="onDelete"><text class="footer-icon">🗑️</text><text class="footer-text">删除</text></view>
+          <view v-if="review.isMine" class="footer-btn danger" @tap="onDelete"><text class="footer-icon">🗑️</text><text class="footer-text">删除</text></view>
           <view v-else class="footer-btn" @tap="onReport"><text class="footer-icon">⚠️</text><text class="footer-text">举报</text></view>
         </view>
-        <text class="review-time">{{ formatTime(review.created_at) }}</text>
+        <text class="review-time">{{ formatTime(review.createdAt) }}</text>
       </view>
 
       <view class="replies-section">
-        <text class="section-title">回复 {{ review.reply_count || 0 }}</text>
-        <view v-for="r in replies" :key="r.reply_id" class="reply-item">
-          <image v-if="r.user_avatar" class="reply-avatar" :src="r.user_avatar" mode="aspectFill" />
-          <view v-else class="reply-avatar default-avatar"><text class="avatar-text">{{ r.user_nickname?.charAt(0) || '热' }}</text></view>
+        <text class="section-title">回复 {{ review.replyCount || 0 }}</text>
+        <view v-for="r in replies" :key="r.replyId" class="reply-item">
+          <image v-if="r.userAvatar" class="reply-avatar" :src="r.userAvatar" mode="aspectFill" />
+          <view v-else class="reply-avatar default-avatar"><text class="avatar-text">{{ r.userNickname?.charAt(0) || '热' }}</text></view>
           <view class="reply-body">
             <view class="reply-head">
-              <text class="reply-name">{{ r.user_nickname }}{{ r.is_mine ? ' (我)' : '' }}</text>
-              <text class="reply-time">{{ formatTime(r.created_at) }}</text>
+              <text class="reply-name">{{ r.userNickname }}{{ r.isMine ? ' (我)' : '' }}</text>
+              <text class="reply-time">{{ formatTime(r.createdAt) }}</text>
             </view>
             <text class="reply-content">{{ r.content }}</text>
           </view>
@@ -94,7 +94,7 @@ async function loadAll() {
   loading.value = true
   try {
     const listData: any = await getReviewList(perfId.value, 'HELPFUL', 1, 100)
-    review.value = (listData.list || []).find((r: any) => r.review_id === reviewId.value) || null
+    review.value = (listData.list || []).find((r: any) => r.reviewId === reviewId.value) || null
     await refreshReplies()
   } catch (e) {} finally {
     loading.value = false
@@ -128,8 +128,8 @@ async function onHelpful() {
   if (!review.value) return
   try {
     const res: any = await toggleHelpful(reviewId.value)
-    review.value.is_helpful = !!res.is_helpful
-    review.value.helpful_count = (review.value.helpful_count || 0) + (review.value.is_helpful ? 1 : -1)
+    review.value.isHelpful = !!res.isHelpful
+    review.value.helpfulCount = (review.value.helpfulCount || 0) + (review.value.isHelpful ? 1 : -1)
   } catch (e) {}
 }
 
@@ -140,7 +140,7 @@ async function onSubmitReply() {
     replyContent.value = ''
     uni.showToast({ title: '已回复', icon: 'none' })
     refreshReplies()
-    if (review.value) review.value.reply_count = (review.value.reply_count || 0) + 1
+    if (review.value) review.value.replyCount = (review.value.replyCount || 0) + 1
   } catch (e) {}
 }
 

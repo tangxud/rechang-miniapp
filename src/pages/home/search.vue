@@ -76,7 +76,7 @@ function normalizeSuggestions(res: any): any[] {
 
 function normalizeHot(res: any): string[] {
   if (!res) return []
-  if (Array.isArray(res.hot_keywords)) return res.hot_keywords
+  if (Array.isArray(res.hotKeywords)) return res.hotKeywords
   if (Array.isArray(res)) return res.map((s: any) => (typeof s === 'string' ? s : s.text)).filter(Boolean)
   return []
 }

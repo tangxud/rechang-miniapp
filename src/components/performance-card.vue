@@ -33,15 +33,15 @@ const TYPE_LABELS: Record<string, string> = {
   EXHIBITION: '展览'
 }
 
-const id = computed(() => props.item?.performance_id || props.item?.id)
+const id = computed(() => props.item?.performanceId || props.item?.id)
 const displayName = computed(() => props.item?.name || '未知演出')
-const poster = computed(() => props.item?.poster_url || 'https://cdn.rechang.com/placeholder.jpg')
-const startAt = computed(() => props.item?.start_at || '')
-const minPrice = computed(() => props.item?.min_price)
+const poster = computed(() => props.item?.posterUrl || 'https://cdn.rechang.com/placeholder.jpg')
+const startAt = computed(() => props.item?.startAt || '')
+const minPrice = computed(() => props.item?.minPrice)
 const city = computed(() => props.item?.city || '')
-const venue = computed(() => props.item?.venue_name || '')
-const showType = computed(() => props.item?.show_type || '')
-const isHot = computed(() => !!props.item?.is_hot_sale)
+const venue = computed(() => props.item?.venueName || '')
+const showType = computed(() => props.item?.showType || '')
+const isHot = computed(() => !!props.item?.isHotSale)
 
 const typeLabel = computed(() => TYPE_LABELS[showType.value] || showType.value || '')
 

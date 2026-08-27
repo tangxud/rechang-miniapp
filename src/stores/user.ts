@@ -17,13 +17,13 @@ export const useUserStore = defineStore('user', () => {
   async function login(code: string, _nickname: string, _avatarUrl: string) {
     const data: any = await loginApi(code, _nickname, _avatarUrl)
     token.value = data.token
-    userId.value = data.user_id
+    userId.value = data.userId
     nickname.value = data.nickname || _nickname
-    avatarUrl.value = data.avatar_url || _avatarUrl
+    avatarUrl.value = data.avatarUrl || _avatarUrl
     phone.value = data.phone || ''
-    realnameStatus.value = data.realname_status || ''
-    needPhone.value = !!data.need_phone
-    needRealname.value = !!data.need_realname
+    realnameStatus.value = data.realnameStatus || ''
+    needPhone.value = !!data.needPhone
+    needRealname.value = !!data.needRealname
 
     uni.setStorageSync('token', token.value)
     uni.setStorageSync('userId', userId.value)
@@ -49,12 +49,12 @@ export const useUserStore = defineStore('user', () => {
   async function fetchProfile() {
     const data: any = await getUserProfile()
     nickname.value = data.nickname || nickname.value
-    avatarUrl.value = data.avatar_url || avatarUrl.value
+    avatarUrl.value = data.avatarUrl || avatarUrl.value
     phone.value = data.phone || ''
-    realnameStatus.value = data.realname_status || ''
-    needPhone.value = !!data.need_phone
-    needRealname.value = !!data.need_realname
-    if (userId.value == null) userId.value = data.user_id ?? null
+    realnameStatus.value = data.realnameStatus || ''
+    needPhone.value = !!data.needPhone
+    needRealname.value = !!data.needRealname
+    if (userId.value == null) userId.value = data.userId ?? null
   }
 
   async function updateProfile(_nickname: string, _avatarUrl: string) {

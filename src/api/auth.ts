@@ -4,7 +4,7 @@ export function login(code: string, nickname: string, avatarUrl: string) {
   return request({
     url: '/api/auth/login',
     method: 'POST',
-    data: { code, nickname, avatar_url: avatarUrl }
+    data: { code, nickname, avatarUrl: avatarUrl }
   })
 }
 
@@ -15,7 +15,7 @@ export function bindPhone(phone: string) {
 export function submitRealname(idCardFrontUrl: string, idCardBackUrl: string, faceImageUrl: string) {
   return request({
     url: '/api/auth/realname', method: 'POST',
-    data: { id_card_front_url: idCardFrontUrl, id_card_back_url: idCardBackUrl, face_image_url: faceImageUrl }
+    data: { idCardFrontUrl: idCardFrontUrl, idCardBackUrl: idCardBackUrl, faceImageUrl: faceImageUrl }
   })
 }
 
@@ -28,5 +28,5 @@ export function getUserProfile() {
 }
 
 export function updateUserProfile(nickname: string, avatarUrl: string) {
-  return request({ url: '/api/user/profile', method: 'PUT', data: { nickname, avatar_url: avatarUrl } })
+  return request({ url: '/api/user/profile', method: 'PUT', data: { nickname, avatarUrl: avatarUrl } })
 }
