@@ -37,7 +37,8 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { payOrder } from '../../api/order'
+import { payOrder, getPayStatus } from '../../api/order'
+import type { PayParams } from '../../api/order'
 
 const orderId = ref(0)
 const amount = ref(0)
@@ -53,13 +54,56 @@ onLoad((options: any) => {
 
 onUnmounted(() => { if (timer) clearInterval(timer) })
 
+function goResult() {
+  // redirectTo 防止返回键回到收银台对已支付订单重复发起支付
+  uni.redirectTo({ url: `/pages/order/result?id=${orderId.value}` })
+}
+
+/** 调起微信收银台；仅小程序端有此能力，H5 构建时由条件编译剔除 */
+function invokeWechatPay(params: PayParams): Promise<void> {
+  return new Promise((resolve, reject) => {
+    // #ifdef MP-WEIXIN
+    uni.requestPayment({
+      provider: 'wxpay',
+      timeStamp: params.timeStamp,
+      nonceStr: params.nonceStr,
+      package: params.package,
+      signType: params.signType as 'RSA',
+      paySign: params.paySign,
+      success: () => resolve(),
+      fail: (err) => reject(err)
+    })
+    // #endif
+    // #ifndef MP-WEIXIN
+    reject(new Error('当前平台不支持微信收银台'))
+    // #endif
+  })
+}
+
 async function onPay() {
   if (paying.value) return
   paying.value = true
   try {
-    await payOrder(orderId.value)
-    uni.redirectTo({ url: `/pages/order/result?id=${orderId.value}` })
-  } catch (e) {} finally { paying.value = false }
+    const params = await payOrder(orderId.value)
+    // Mock 网关（本地联调）支付即成功，先查状态避免调起无效收银台；真实网关下此处必为未支付
+    const st = await getPayStatus(orderId.value).catch(() => null)
+    if (st?.paid) { goResult(); return }
+    try {
+      await invokeWechatPay(params)
+      goResult()
+    } catch (err: any) {
+      const msg: string = err?.errMsg || err?.message || ''
+      if (msg.includes('cancel')) {
+        uni.showToast({ title: '已取消支付，可重新发起', icon: 'none' })
+      } else {
+        uni.showToast({ title: '支付失败，请重试', icon: 'none' })
+      }
+    }
+  } catch (e) {
+    // payOrder/状态查询失败：request.ts 已统一 toast
+  } finally {
+    paying.value = false
+  }
 }
 
 function formatPrice(cents: number) { return String(cents / 100) }

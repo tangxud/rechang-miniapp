@@ -26,14 +26,28 @@ export function getOrderDetail(id: number) {
   return request({ url: `/api/orders/${id}`, method: 'GET' })
 }
 
+/** 后端 PayParamsVO，camelCase 已对齐；package 为微信 SDK 固定字段名 */
+export interface PayParams {
+  timeStamp: string
+  nonceStr: string
+  package: string
+  signType: string
+  paySign: string
+}
+
 export function payOrder(id: number) {
-  return request({ url: `/api/orders/${id}/pay`, method: 'POST' })
+  return request<PayParams>({ url: `/api/orders/${id}/pay`, method: 'POST' })
 }
 
 export function cancelOrder(id: number) {
   return request({ url: `/api/orders/${id}/cancel`, method: 'POST' })
 }
 
+export interface PayStatus {
+  status: string
+  paid: boolean
+}
+
 export function getPayStatus(id: number) {
-  return request({ url: `/api/orders/${id}/pay/status`, method: 'GET' })
+  return request<PayStatus>({ url: `/api/orders/${id}/pay/status`, method: 'GET' })
 }
